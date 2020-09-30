@@ -21,8 +21,4 @@ class Card:
         if self.color == [255, 255, 0]:
             self.uno_card = pygame.image.load(os.path.join("packege_cards", f"uy{self.val}.jpg"))
 
-    def get_x(self):
-        return self.x
 
-    def get_y(self):
-        return self.y

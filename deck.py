@@ -1,4 +1,5 @@
 from card import Card
+import random
 
 
 class Deck:
@@ -24,14 +25,13 @@ class Deck:
             self.cards.append(Card([255, 255, 0], i, self.screen))
         for c in self.cards:
             c.set_cards()
-
-    def get_pos(self, x, y):
-        for c in self.cards:
-            if c.get_x() <= x <= c.get_x() + 20 and c.get_y() <= y <= c.get_y() + 100:
-                return c
+        random.shuffle(self.cards)
 
     def draw_card(self):
         if len(self.cards) == 0:
             self.deck_creator()
 
         return self.cards.pop()
+
+    def shuffle_deck(self):
+        random.shuffle(self.cards)

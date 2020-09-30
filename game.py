@@ -4,8 +4,8 @@ from board import Board
 
 
 def main():
-    screen = pygame.display.set_mode((1000, 500))
-    board = Board("hej", "hej", screen)
+    screen = pygame.display.set_mode((1000, 800))
+    board = Board("hej", screen)
     running = True
     while running:
         for event in pygame.event.get():
