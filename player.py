@@ -3,8 +3,8 @@ class Player:
         self.name = name
         self.hand = []
 
-    def draw_card(self, cards):
-        self.hand.append(cards.draw_card())
+    def draw_card(self, top_card):
+        self.hand.append(top_card.draw_card())
 
     def draw(self):
         for i, cards in enumerate(self.hand):

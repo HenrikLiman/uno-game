@@ -7,7 +7,6 @@ def main():
     screen = pygame.display.set_mode((1000, 500))
     board = Board("hej", "hej", screen)
     running = True
-    board.deck.deck_creator()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

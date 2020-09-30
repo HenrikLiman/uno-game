@@ -14,11 +14,11 @@ class Deck:
         self.cards.reverse()
 
     def deck_creator(self):
-        for i in range(5):
+        for i in range(2):
             self.cards.append(Card([255, 0, 0], i, self.screen))
-        for i in range(5):
+        for i in range(2):
             self.cards.append(Card([0, 255, 0], i, self.screen))
-        for i in range(5):
+        for i in range(2):
             self.cards.append(Card([0, 0, 255], i, self.screen))
 
     def get_pos(self, x, y):
@@ -27,7 +27,7 @@ class Deck:
                 return c
 
     def draw_card(self):
-        if not self.cards:
+        if len(self.cards) == 0:
             self.deck_creator()
 
         return self.cards.pop()
