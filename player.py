@@ -2,19 +2,18 @@ import operator
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, player_name):
 
-        self.playing = False
+        self.payer_name = player_name
         self.hand = []
         self.uno = False
-
 
     def draw_card(self, top_card):
         self.hand.append(top_card.draw_card())
         self.hand.sort(key=operator.attrgetter('val'))
         self.hand.sort(key=operator.attrgetter("color"))
 
-    def draw(self,):
+    def draw(self, ):
         for i, cards in enumerate(self.hand):
             cards.draw(30 + i * 30, 600)
 

@@ -11,16 +11,14 @@ class Board:
 
         self.player = []
         for i in range(nr_of_players):
-            self.player.append(Player())
+            self.player.append(Player(i))
         self.deck = Deck(screen)
 
         self.screen = screen
         self.active_card = Card(1, 1, screen)
 
         self.player_turn = 0
-
-    def turn(self):
-        pass
+        self.running = True
 
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uDraw.jpg")), (800, 200))
@@ -53,7 +51,23 @@ class Board:
                 self.next_player()
 
     def run(self):
-        pass
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    self.draw_card_button(mouse_x, mouse_y)
+                    self.uno_button(mouse_x, mouse_y)
+                    self.played_card(mouse_x, mouse_y)
+
+            self.screen.fill([0, 0, 0])
+
+            self.draw()
+            pygame.display.update()
+            if self.uno_win():
+                self.running = False
+                print(f"Player nr: {self.player[self.player_turn].payer_name} won")
 
     def set_up(self):
         self.deck.deck_creator()
@@ -61,7 +75,7 @@ class Board:
         for i in range(len(self.player)):
             self.player[i].set_up(self.deck)
 
-    def UnoWin(self):
-        if self.player[self.player_turn].uno:
-            return False
-        return True
+    def uno_win(self):
+        if self.player[self.player_turn-1].uno and len(self.player[self.player_turn-1].hand) == 0:
+            return True
+        return False
