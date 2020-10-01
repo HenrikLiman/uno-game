@@ -4,9 +4,11 @@ from board import Board
 
 
 def main():
+    nr_of_players = 3
     screen = pygame.display.set_mode((1000, 800))
-    board = Board("hej", screen)
+    board = Board(nr_of_players, screen)
     running = True
+    board.set_up()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -18,8 +20,11 @@ def main():
                 board.played_card(mouse_x, mouse_y)
 
         screen.fill([0, 0, 0])
+
         board.draw()
         pygame.display.update()
+        if board.UnoWin():
+            running == False
 
 
 if __name__ == '__main__':

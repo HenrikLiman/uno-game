@@ -13,11 +13,11 @@ class Card:
         self.screen.blit(self.uno_card, (x, y))
 
     def set_cards(self):
-        if self.color == [255, 0, 0]:
+        if self.color == 1:
             self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ur{self.val}.jpg"))
-        if self.color == [0, 255, 0]:
+        if self.color == 2:
             self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ug{self.val}.jpg"))
-        if self.color == [255, 255, 0]:
+        if self.color == 4:
             self.uno_card = pygame.image.load(os.path.join("packege_cards", f"uy{self.val}.jpg"))
 
 

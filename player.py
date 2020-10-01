@@ -2,17 +2,19 @@ import operator
 
 
 class Player:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+
+        self.playing = False
         self.hand = []
         self.uno = False
+
 
     def draw_card(self, top_card):
         self.hand.append(top_card.draw_card())
         self.hand.sort(key=operator.attrgetter('val'))
         self.hand.sort(key=operator.attrgetter("color"))
 
-    def draw(self):
+    def draw(self,):
         for i, cards in enumerate(self.hand):
             cards.draw(30 + i * 30, 600)
 
@@ -26,10 +28,13 @@ class Player:
     def remove_card(self, card):
         for i, c in enumerate(self.hand):
             if c.val == card.val and c.color == card.color:
-                print(card.val, card.color, i)
                 self.hand.remove(self.hand[i])
                 break
 
     def has_uno(self):
-        if len(self.hand) == 1:
+        if len(self.hand) == 2:
             self.uno = True
+
+    def set_up(self, deck):
+        for i in range(5):
+            self.draw_card(deck)

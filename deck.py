@@ -9,13 +9,13 @@ class Deck:
 
     def deck_creator(self):
         for i in range(10):
-            self.cards.append(Card([255, 0, 0], i, self.screen))
+            self.cards.append(Card(1, i, self.screen))#red
         for i in range(10):
-            self.cards.append(Card([0, 255, 0], i, self.screen))
+            self.cards.append(Card(2, i, self.screen))#green
         for i in range(10):
-            self.cards.append(Card([0, 0, 255], i, self.screen))
+            self.cards.append(Card(3, i, self.screen))#blue
         for i in range(10):
-            self.cards.append(Card([255, 255, 0], i, self.screen))
+            self.cards.append(Card(4, i, self.screen)) #yellow
         for c in self.cards:
             c.set_cards()
         random.shuffle(self.cards)
@@ -23,7 +23,6 @@ class Deck:
     def draw_card(self):
         if len(self.cards) == 0:
             self.deck_creator()
-
         return self.cards.pop()
 
     def shuffle_deck(self):
