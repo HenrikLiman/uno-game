@@ -13,8 +13,8 @@ def main():
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                print(mouse_x, mouse_y)
                 board.draw_card_button(mouse_x, mouse_y)
+                board.uno_button(mouse_x, mouse_y)
                 board.played_card(mouse_x, mouse_y)
 
         screen.fill([0, 0, 0])

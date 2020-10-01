@@ -5,6 +5,7 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.hand = []
+        self.uno = False
 
     def draw_card(self, top_card):
         self.hand.append(top_card.draw_card())
@@ -28,3 +29,7 @@ class Player:
                 print(card.val, card.color, i)
                 self.hand.remove(self.hand[i])
                 break
+
+    def has_uno(self):
+        if len(self.hand) == 1:
+            self.uno = True

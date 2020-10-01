@@ -7,13 +7,6 @@ class Deck:
         self.cards = []
         self.screen = screen
 
-    def draw(self):
-        for c in self.cards:
-            c.draw()
-
-    def shuffle_deck(self):
-        self.cards.reverse()
-
     def deck_creator(self):
         for i in range(10):
             self.cards.append(Card([255, 0, 0], i, self.screen))
