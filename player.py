@@ -15,13 +15,13 @@ class Player:
 
     def draw(self, ):
         for i, cards in enumerate(self.hand):
-            cards.draw(30 + i * 30, 600)
+            cards.draw(30 + i * 30, 430)
 
     def play_card(self, x, y):
-        if 30 + len(self.hand) * 30 <= x <= len(self.hand) * 30 + 100 and 600 <= y <= 760:
+        if 30 + len(self.hand) * 30 <= x <= len(self.hand) * 30 + 100 and 430 <= y <= 590:
             return self.hand[-1]
         for i, card in enumerate(self.hand):
-            if 30 + i * 30 <= x <= i * 30 + 60 and 600 <= y <= 760:
+            if 30 + i * 30 <= x <= i * 30 + 60 and 430 <= y <= 590:
                 return card
 
     def remove_card(self, card):

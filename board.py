@@ -20,6 +20,25 @@ class Board:
         self.player_turn = 0
         self.running = True
 
+    def run(self):
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    self.draw_card_button(mouse_x, mouse_y)
+                    self.uno_button(mouse_x, mouse_y)
+                    self.played_card(mouse_x, mouse_y)
+
+            self.screen.fill([0, 0, 0])
+
+            self.draw()
+            pygame.display.update()
+            if self.uno_win():
+                self.running = False
+                print(f"Player nr: {self.player[self.player_turn].payer_name} won")
+
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uDraw.jpg")), (800, 200))
         self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uUno.jpg")), (800, 130))
@@ -50,24 +69,7 @@ class Board:
                 self.player[self.player_turn].remove_card(selected_card)
                 self.next_player()
 
-    def run(self):
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                if event.type == pygame.MOUSEBUTTONUP:
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
-                    self.draw_card_button(mouse_x, mouse_y)
-                    self.uno_button(mouse_x, mouse_y)
-                    self.played_card(mouse_x, mouse_y)
 
-            self.screen.fill([0, 0, 0])
-
-            self.draw()
-            pygame.display.update()
-            if self.uno_win():
-                self.running = False
-                print(f"Player nr: {self.player[self.player_turn].payer_name} won")
 
     def set_up(self):
         self.deck.deck_creator()
