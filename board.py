@@ -21,12 +21,6 @@ class Board:
         self.play_direction_revers = False  # True = Right, False = left
         self.running = True
 
-    def reverse_order(self):
-        if self.play_direction_revers:
-            self.play_direction_revers = False
-        else:
-            self.play_direction_revers = True
-
     def run(self):
         while self.running:
             for event in pygame.event.get():
@@ -56,16 +50,14 @@ class Board:
             self.next_player()
 
     def next_player(self):
-        print(self.player)
-        print(self.player_turn)
         if not self.play_direction_revers:
             if self.player_turn == len(self.player) - 1:
                 self.player_turn = 0
             else:
                 self.player_turn += 1
         else:
-            if self.player_turn == len(self.player) + 1:
-                self.player_turn = 0
+            if self.player_turn == len(self.player):
+                self.player_turn = len(self.player)
             else:
                 self.player_turn -= 1
 
@@ -79,28 +71,42 @@ class Board:
             self.player[self.player_turn].has_uno()
 
     def card_effect(self, chosen_effect):
-        if chosen_effect == 10:
+        if chosen_effect == 10:  # block
             self.next_player()
-        if chosen_effect == 11:
+        if chosen_effect == 11:  # draw2
             for i in range(2):
                 self.player[self.player_turn].draw_card(self.deck)
-        if chosen_effect == 12:
-            print(self.player[self.player_turn].player_name)
-            print(".....")
+        if chosen_effect == 12:  # revers
             self.reverse_order()
+            self.next_player()
+        if chosen_effect == 13:  # change color
+            while True:
+                self.pick_a_color
 
-    def played_card(self, x,y):
 
-        selected_card = self.player[self.player_turn].play_card(x,y)
+                print("...")
+        if chosen_effect == 14:  # draw 4 and change color
+            for i in range(4):
+                self.player[self.player_turn].draw_card(self.deck)
+
+    def pick_a_color(self):
+        pygame.draw.rect(self.screen, [255, 0, 0], (100, 50, 50, 50))
+        pygame.draw.rect(self.screen, [0, 0, 255], (100, 100, 50, 50))
+        pygame.draw.rect(self.screen, [255, 255, 0], (100, 150, 50, 50))
+        pygame.draw.rect(self.screen, [0, 255, 0], (100, 200, 50, 50))
+        pygame.display.update()
+
+    def played_card(self, x, y):
+
+        selected_card = self.player[self.player_turn].play_card(x, y)
 
         if selected_card:
-            if selected_card.color == self.active_card.color or selected_card.val == self.active_card.val:
+            if selected_card.color == self.active_card.color or selected_card.val == self.active_card.val or selected_card.color == 4:
                 self.active_card = selected_card
                 self.player[self.player_turn].remove_card(selected_card)
-
+                self.next_player()
                 if selected_card.val > 9:
                     self.card_effect(selected_card.val)
-                self.next_player()
 
     def set_up(self):
         self.deck.deck_creator()
@@ -112,3 +118,7 @@ class Board:
         if self.player[self.player_turn - 1].uno and len(self.player[self.player_turn - 1].hand) == 0:
             return True
         return False
+
+    def reverse_order(self):
+        self.player.reverse()
+        self.player_turn = len(self.player) - self.player_turn
