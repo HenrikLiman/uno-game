@@ -4,20 +4,22 @@ import operator
 class Player:
     def __init__(self, player_name):
 
-        self.payer_name = player_name
+        self.player_name = player_name
         self.hand = []
         self.uno = False
 
-    def draw_card(self, top_card):
-        self.hand.append(top_card.draw_card())
+    def draw_card(self, deck):
+        self.hand.append(deck.draw_card())
         self.hand.sort(key=operator.attrgetter('val'))
         self.hand.sort(key=operator.attrgetter("color"))
 
-    def draw(self, ):
+        self.uno = False
+
+    def draw(self):
         for i, cards in enumerate(self.hand):
             cards.draw(30 + i * 30, 430)
 
-    def play_card(self, x, y):
+    def play_card(self, x,y):
         if 30 + len(self.hand) * 30 <= x <= len(self.hand) * 30 + 100 and 430 <= y <= 590:
             return self.hand[-1]
         for i, card in enumerate(self.hand):

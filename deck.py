@@ -8,14 +8,11 @@ class Deck:
         self.screen = screen
 
     def deck_creator(self):
-        for i in range(10):
-            self.cards.append(Card(1, i, self.screen))#red
-        for i in range(10):
-            self.cards.append(Card(2, i, self.screen))#green
-        for i in range(10):
-            self.cards.append(Card(3, i, self.screen))#blue
-        for i in range(10):
-            self.cards.append(Card(4, i, self.screen)) #yellow
+
+        for c in range(4):
+            for i in range(13):
+                self.cards.append(Card(c, i, self.screen))  # c is color with: 1 red, 2 green, 3 blue, 4 yellow
+
         for c in self.cards:
             c.set_cards()
         random.shuffle(self.cards)

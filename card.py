@@ -7,17 +7,20 @@ class Card:
         self.color = color
         self.val = val
         self.screen = screen
-        self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ub{self.val}.jpg"))
+        self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ub0.jpg"))
 
     def draw(self, x, y):
         self.screen.blit(self.uno_card, (x, y))
 
     def set_cards(self):
-        if self.color == 1:
-            self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ur{self.val}.jpg"))
-        if self.color == 2:
-            self.uno_card = pygame.image.load(os.path.join("packege_cards", f"ug{self.val}.jpg"))
-        if self.color == 4:
-            self.uno_card = pygame.image.load(os.path.join("packege_cards", f"uy{self.val}.jpg"))
-
-
+        colors = ["r", "g", "b", "y"]
+        for i, c in enumerate(colors):
+            if self.color == i:
+                if self.val == 10: #stop next players turn
+                    self.uno_card = pygame.image.load(os.path.join("packege_cards", f"u{c}s.jpg"))
+                elif self.val == 11:#next player draws 2
+                    self.uno_card = pygame.image.load(os.path.join("packege_cards", f"u{c}d.jpg"))
+                elif self.val == 12:#revers play order
+                    self.uno_card = pygame.image.load(os.path.join("packege_cards", f"u{c}r.jpg"))
+                else:
+                    self.uno_card = pygame.image.load(os.path.join("packege_cards", f"u{c}{self.val}.jpg"))
