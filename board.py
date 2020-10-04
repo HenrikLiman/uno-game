@@ -18,25 +18,25 @@ class Board:
         self.active_card = Card(1, 1, screen)
 
         self.player_turn = 0
-        self.play_direction_revers = False  # True = Right, False = left
+#        self.play_direction_revers = False  # True = Right, False = left
         self.running = True
 
     def run(self):
         while self.running:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     self.button_input(mouse_x, mouse_y)
-
             self.screen.fill([0, 0, 0])
 
             self.draw()
             pygame.display.update()
             if self.uno_win():
                 self.running = False
-                print(f"Player nr: {self.player[self.player_turn].payer_name} won")
+                print(f"Player nr: {self.player[self.player_turn].player_name} won")
 
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uDraw.jpg")), (800, 200))
@@ -50,16 +50,11 @@ class Board:
             self.next_player()
 
     def next_player(self):
-        if not self.play_direction_revers:
-            if self.player_turn == len(self.player) - 1:
-                self.player_turn = 0
-            else:
-                self.player_turn += 1
+
+        if self.player_turn == len(self.player) - 1:
+            self.player_turn = 0
         else:
-            if self.player_turn == len(self.player):
-                self.player_turn = len(self.player)
-            else:
-                self.player_turn -= 1
+            self.player_turn += 1
 
     def button_input(self, x, y):
         self.draw_card_button(x, y)
@@ -75,26 +70,50 @@ class Board:
             self.next_player()
         if chosen_effect == 11:  # draw2
             for i in range(2):
-                self.player[self.player_turn].draw_card(self.deck)
+                if self.player_turn == len(self.player) - 1:
+                    self.player[0].draw_card(self.deck)
+                else:
+                    self.player[self.player_turn].draw_card(self.deck)
         if chosen_effect == 12:  # revers
             self.reverse_order()
             self.next_player()
         if chosen_effect == 13:  # change color
-            while True:
-                self.pick_a_color
+            self.pick_a_color()
 
-
-                print("...")
         if chosen_effect == 14:  # draw 4 and change color
+
             for i in range(4):
-                self.player[self.player_turn].draw_card(self.deck)
+                if self.player_turn == len(self.player) - 1:
+                    self.player[0].draw_card(self.deck)
+                else:
+                    self.player[self.player_turn].draw_card(self.deck)
+            self.pick_a_color()
 
     def pick_a_color(self):
-        pygame.draw.rect(self.screen, [255, 0, 0], (100, 50, 50, 50))
-        pygame.draw.rect(self.screen, [0, 0, 255], (100, 100, 50, 50))
-        pygame.draw.rect(self.screen, [255, 255, 0], (100, 150, 50, 50))
-        pygame.draw.rect(self.screen, [0, 255, 0], (100, 200, 50, 50))
-        pygame.display.update()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if 300 <= mouse_x <= 350 and 200 <= mouse_y <= 280:
+                        self.active_card = Card(0, self.active_card.val, self.screen)
+                        running = False
+                    if 350 <= mouse_x <= 400 and 200 <= mouse_y <= 280:
+                        self.active_card = Card(2, self.active_card.val, self.screen)
+                        running = False
+                    if 300 <= mouse_x <= 350 and 280 <= mouse_y <= 360:
+                        self.active_card = Card(3, self.active_card.val, self.screen)
+                        running = False
+                    if 350 <= mouse_x <= 400 and 280 <= mouse_y <= 360:
+                        self.active_card = Card(1, self.active_card.val, self.screen)
+                        running = False
+            pygame.draw.rect(self.screen, [255, 0, 0], (300, 200, 50, 80))
+            pygame.draw.rect(self.screen, [0, 0, 255], (350, 200, 50, 80))
+            pygame.draw.rect(self.screen, [255, 255, 0], (300, 280, 50, 80))
+            pygame.draw.rect(self.screen, [0, 255, 0], (350, 280, 50, 80))
+            pygame.display.update()
 
     def played_card(self, x, y):
 
@@ -120,5 +139,7 @@ class Board:
         return False
 
     def reverse_order(self):
+
         self.player.reverse()
-        self.player_turn = len(self.player) - self.player_turn
+        self.player_turn = len(self.player) - self.player_turn - 1
+        self.next_player()
