@@ -18,7 +18,7 @@ class Board:
         self.active_card = Card(1, 1, screen)
 
         self.player_turn = 0
-#        self.play_direction_revers = False  # True = Right, False = left
+        #        self.play_direction_revers = False  # True = Right, False = left
         self.running = True
 
     def run(self):
@@ -39,8 +39,8 @@ class Board:
                 print(f"Player nr: {self.player[self.player_turn].player_name} won")
 
     def draw(self):
-        self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uDraw.jpg")), (800, 200))
-        self.screen.blit(pygame.image.load(os.path.join("packege_cards", "uUno.jpg")), (800, 130))
+        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (800, 200))
+        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uUno.jpg")), (800, 130))
         self.player[self.player_turn].draw()
         self.active_card.draw(300, 200)
 
@@ -87,6 +87,7 @@ class Board:
                     self.player[0].draw_card(self.deck)
                 else:
                     self.player[self.player_turn].draw_card(self.deck)
+
             self.pick_a_color()
 
     def pick_a_color(self):
@@ -97,16 +98,16 @@ class Board:
                     self.running = False
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    if 300 <= mouse_x <= 350 and 200 <= mouse_y <= 280:
+                    if 300 <= mouse_x <= 350 and 200 <= mouse_y <= 280:  # red
                         self.active_card = Card(0, self.active_card.val, self.screen)
                         running = False
-                    if 350 <= mouse_x <= 400 and 200 <= mouse_y <= 280:
+                    if 350 <= mouse_x <= 400 and 200 <= mouse_y <= 280:  # blue
                         self.active_card = Card(2, self.active_card.val, self.screen)
                         running = False
-                    if 300 <= mouse_x <= 350 and 280 <= mouse_y <= 360:
+                    if 300 <= mouse_x <= 350 and 280 <= mouse_y <= 360:  # yellow
                         self.active_card = Card(3, self.active_card.val, self.screen)
                         running = False
-                    if 350 <= mouse_x <= 400 and 280 <= mouse_y <= 360:
+                    if 350 <= mouse_x <= 400 and 280 <= mouse_y <= 360:  # green
                         self.active_card = Card(1, self.active_card.val, self.screen)
                         running = False
             pygame.draw.rect(self.screen, [255, 0, 0], (300, 200, 50, 80))
@@ -120,7 +121,9 @@ class Board:
         selected_card = self.player[self.player_turn].play_card(x, y)
 
         if selected_card:
-            if selected_card.color == self.active_card.color or selected_card.val == self.active_card.val or selected_card.color == 4:
+            if selected_card.color == self.active_card.color or selected_card.val == self.active_card.val or \
+                    selected_card.color == 4:
+
                 self.active_card = selected_card
                 self.player[self.player_turn].remove_card(selected_card)
                 self.next_player()
