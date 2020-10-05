@@ -27,7 +27,6 @@ class Card:
                     self.uno_card = pygame.image.load(os.path.join("package_cards", f"u{c}c.jpg"))
                 elif self.val == 14:
                     self.uno_card = pygame.image.load(os.path.join("package_cards", f"u{c}d.jpg"))
-
                 else:
                     self.uno_card = pygame.image.load(os.path.join("package_cards", f"u{c}{self.val}.jpg"))
 
