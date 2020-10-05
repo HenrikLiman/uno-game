@@ -1,5 +1,6 @@
 import pygame
 
+from Settings import *
 from board import Board
 from menu import Menu
 
@@ -7,7 +8,7 @@ from menu import Menu
 def main():
     pygame.init()
     nr_of_bots = 3
-    screen = pygame.display.set_mode((960, 540))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     menu = Menu(screen)
     if menu.menu_screen():

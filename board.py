@@ -1,6 +1,8 @@
 import pygame
 import os
+import random
 
+from Settings import *
 from card import Card
 from deck import Deck
 from player import Player, Npc
@@ -11,15 +13,15 @@ class Board:
 
         self.player = [Player("Henrik")]
         for i in range(nr_of_bots):
-            self.player.append(Npc(f"npc {i}"))
+            self.player.append(Npc(random.choice(NAMES)))
         self.deck = Deck(screen)
 
         self.screen = screen
         self.active_card = Card(1, 1, screen)
 
         self.player_turn = 0
-        #        self.play_direction_revers = False  # True = Right, False = left
         self.running = True
+        self.real_player = 0
 
     def run(self):
         clock = pygame.time.Clock()
@@ -34,22 +36,29 @@ class Board:
                     self.button_input(mouse_x, mouse_y)
                     print(self.player[self.player_turn].player_name)
             self.screen.fill([0, 0, 0])
+            self.screen.blit(pygame.image.load(os.path.join("package_cards", "play_area.jpg")), (0, 0))
             text_surface = base_font.render(self.player[self.player_turn].player_name, False, (255, 255, 255))
-            self.screen.blit(text_surface, (100, 100))
+            self.screen.blit(text_surface, (750, 50))
             self.draw()
             pygame.display.update()
 
             if self.uno_win():
                 self.running = False
-                print(f"Player nr: {self.player[self.player_turn-1].player_name} won")
+                print(f"Player nr: {self.player[self.player_turn - 1].player_name} won")
         clock.tick(10)
 
     def draw(self):
-        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (800, 200))
-        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uUno.jpg")), (800, 130))
+        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (DRAW_BUTTON_X, DRAW_BUTTON_Y))
+        self.screen.blit(pygame.image.load(os.path.join("package_cards", "uUno.jpg")), (UNO_BUTTON_X, UNO_BUTTON_Y))
         if not isinstance(self.player[self.player_turn], Npc):
             self.player[self.player_turn].draw()
-        self.active_card.draw(300, 200)
+            self.real_player = self.player_turn
+        else:
+            for p in self.player:
+                if not isinstance(p, Npc):
+                    p.draw()
+                    break
+        self.active_card.draw(CARDAREA_X, CARDAREA_y)
 
     def next_player(self):
 
@@ -63,13 +72,12 @@ class Board:
         self.draw_card_button(x, y)
         self.uno_button(x, y)
 
-
     def uno_button(self, x, y, ):
-        if 800 <= x <= 900 and 130 <= y <= 180:
+        if UNO_BUTTON_X <= x <= UNO_BUTTON_X + 100 and UNO_BUTTON_Y <= y <= UNO_BUTTON_Y + 50:
             self.player[self.player_turn].has_uno()
 
     def draw_card_button(self, x, y):
-        if 800 <= x <= 900 and 200 <= y <= 250:
+        if DRAW_BUTTON_X <= x <= DRAW_BUTTON_X + 100 and DRAW_BUTTON_Y <= y <= DRAW_BUTTON_Y + 50:
             self.player[self.player_turn].draw_card(self.deck)
             self.next_player()
 
@@ -121,30 +129,30 @@ class Board:
     def pick_a_color(self):
         running = True
         while running:
-            pygame.draw.rect(self.screen, [255, 0, 0], (300, 200, 50, 80))
-            pygame.draw.rect(self.screen, [0, 0, 255], (350, 200, 50, 80))
-            pygame.draw.rect(self.screen, [255, 255, 0], (300, 280, 50, 80))
-            pygame.draw.rect(self.screen, [0, 255, 0], (350, 280, 50, 80))
+            pygame.draw.rect(self.screen, [255, 0, 0], (CARDAREA_X, CARDAREA_y, 50, 80))
+            pygame.draw.rect(self.screen, [0, 0, 255], (CARDAREA_X + 50, CARDAREA_y, 50, 80))
+            pygame.draw.rect(self.screen, [255, 255, 0], (CARDAREA_X, CARDAREA_y + 80, 50, 80))
+            pygame.draw.rect(self.screen, [0, 255, 0], (CARDAREA_X + 50, CARDAREA_y + 80, 50, 80))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                if not isinstance(self.player[self.player_turn-1], Npc):
+                if not isinstance(self.player[self.player_turn - 1], Npc):
                     if event.type == pygame.MOUSEBUTTONUP:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
-                        if 300 <= mouse_x <= 350 and 200 <= mouse_y <= 280:  # red
+                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # red
                             self.active_card = Card(0, self.active_card.val, self.screen)
                             running = False
-                        if 350 <= mouse_x <= 400 and 200 <= mouse_y <= 280:  # blue
+                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # blue
                             self.active_card = Card(2, self.active_card.val, self.screen)
                             running = False
-                        if 300 <= mouse_x <= 350 and 280 <= mouse_y <= 360:  # yellow
+                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # yellow
                             self.active_card = Card(3, self.active_card.val, self.screen)
                             running = False
-                        if 350 <= mouse_x <= 400 and 280 <= mouse_y <= 360:  # green
+                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # green
                             self.active_card = Card(1, self.active_card.val, self.screen)
                             running = False
                 else:
-                    self.active_card = Card(self.player[self.player_turn-1].npc_pick_color(), self.active_card.val,
+                    self.active_card = Card(self.player[self.player_turn - 1].npc_pick_color(), self.active_card.val,
                                             self.screen)
                     running = False
 
@@ -166,4 +174,3 @@ class Board:
         self.player.reverse()
         self.player_turn = len(self.player) - self.player_turn - 1
         self.next_player()
-
