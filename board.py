@@ -32,7 +32,7 @@ class Board:
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     self.button_input(mouse_x, mouse_y)
-
+                    print(self.player[self.player_turn].player_name)
             self.screen.fill([0, 0, 0])
             text_surface = base_font.render(self.player[self.player_turn].player_name, False, (255, 255, 255))
             self.screen.blit(text_surface, (100, 100))
@@ -47,8 +47,8 @@ class Board:
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (800, 200))
         self.screen.blit(pygame.image.load(os.path.join("package_cards", "uUno.jpg")), (800, 130))
-        # if not isinstance(self.player[self.player_turn], Npc):
-        self.player[self.player_turn].draw()
+        if not isinstance(self.player[self.player_turn], Npc):
+            self.player[self.player_turn].draw()
         self.active_card.draw(300, 200)
 
     def next_player(self):
@@ -59,9 +59,10 @@ class Board:
             self.player_turn += 1
 
     def button_input(self, x, y):
+        self.played_card(x, y)
         self.draw_card_button(x, y)
         self.uno_button(x, y)
-        self.played_card(x, y)
+
 
     def uno_button(self, x, y, ):
         if 800 <= x <= 900 and 130 <= y <= 180:
@@ -165,3 +166,4 @@ class Board:
         self.player.reverse()
         self.player_turn = len(self.player) - self.player_turn - 1
         self.next_player()
+
