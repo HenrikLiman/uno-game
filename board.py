@@ -11,7 +11,7 @@ from player import Player, Npc
 class Board:
     def __init__(self, nr_of_bots, screen):
 
-        self.player = [Player("Henrik")]
+        self.player = [Player("Ellen")]
         for i in range(nr_of_bots):
             self.player.append(Npc(random.choice(NAMES)))
         self.deck = Deck(screen)
