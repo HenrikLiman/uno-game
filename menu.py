@@ -1,45 +1,79 @@
 import pygame
 import os
-
-pygame.init()
+from Settings import *
 
 
 class Menu:
     def __init__(self, screen):
         self.screen = screen
-        self.player = []
+        self.player = ""
         self.user_text = ""
-        self.input_rect = pygame.Rect(200, 200, 140, 32)
+        self.input_rect = pygame.Rect(NAME_INPUT_X, NAME_INPUT_Y, 140, 32)
         self.input_nr_of_players = ""
+        self.nr_of_npc = 0
+
+        self.input_npc = False
+        self.name_the_player = False
+        self.running = True
+
+        self.image = pygame.image.load(os.path.join("package_cards", "input.png"))
 
     def menu_screen(self):
         base_font = pygame.font.Font(None, 32)
 
-        running = True
-        while running:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return False
+                    self.running = False
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     if self.start_game(mouse_x, mouse_y):
-                        return True
+                        self.name_the_player = True
                     if self.exit_game(mouse_x, mouse_y):
-                        return False
-#                if event.type == pygame.KEYDOWN:
-#                    self.player_input(event)
-            self.screen.blit(pygame.image.load(os.path.join("package_cards", "UnoScreenText.jpg")), (0, 0))
+                        self.running = False
+                    elif self.input_npc:
+                        self.nr_of_players(mouse_x, mouse_y)
+                if event.type == pygame.KEYDOWN and self.name_the_player:
+                    self.player_input(event)
 
-#            pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect)
-#            text_surface = base_font.render(self.user_text, False, (255, 255, 255))
-#            self.screen.blit(text_surface, (205, 205))
+            self.screen.blit(pygame.image.load(os.path.join("package_cards", "UnoScreenText.jpg")), (0, 0))
+            if self.name_the_player:
+                self.screen.blit(self.image, (0, 0))
+            if self.name_the_player and not self.input_npc:
+                text_surface = base_font.render(self.user_text, False, (255, 255, 255))
+                self.screen.blit(text_surface, (NAME_INPUT_X, NAME_INPUT_Y + 5))
+
             pygame.display.update()
+
+        if self.nr_of_npc == 0:
+            return False
+        else:
+            return True
 
     def player_input(self, event):
         if event.key == pygame.K_BACKSPACE:
-            user_text = self.user_text[0:-1]
+            self.user_text = self.user_text[0:-1]
+        elif event.key == pygame.K_RETURN:
+            if self.input_npc:
+                self.nr_of_npc = int(self.user_text)
+                self.running = False
+            else:
+                self.player = self.user_text
+                self.input_npc = True
+                self.user_text = ""
+                self.image = pygame.image.load(os.path.join("package_cards", "input2.png"))
+
         else:
             self.user_text += event.unicode
+
+    def nr_of_players(self, x, y):
+        for i in range(3):
+            for j in range(5):
+                if 305 + j * 100 <= x <= 360 + j * 100 and 220 + 60 * i <= y <= 270 + 60 * i:
+                    self.nr_of_npc = i * 4 + j + 1
+                    print(i * 4 + j + 1)
+
+        self.running = False
 
     def start_game(self, x, y):
         if 0 <= x <= 255 and 200 <= y <= 255:

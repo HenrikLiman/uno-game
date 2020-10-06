@@ -5,13 +5,14 @@ import random
 from Settings import *
 from card import Card
 from deck import Deck
-from player import Player, Npc
+from npc import Npc
+from player import Player
 
 
 class Board:
-    def __init__(self, nr_of_bots, screen):
+    def __init__(self, nr_of_bots, player, screen):
 
-        self.player = [Player("Ellen")]
+        self.player = [Player(player)]
         for i in range(nr_of_bots):
             self.player.append(Npc(random.choice(NAMES)))
         self.deck = Deck(screen)
@@ -19,14 +20,13 @@ class Board:
         self.screen = screen
         self.active_card = Card(1, 1, screen)
 
-        self.player_turn = 0
+        self.player_turn = random.randrange(0, nr_of_bots)
         self.running = True
         self.real_player = 0
 
     def run(self):
         clock = pygame.time.Clock()
         while self.running:
-            base_font = pygame.font.Font(None, 32)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -37,14 +37,13 @@ class Board:
                     print(self.player[self.player_turn].player_name)
             self.screen.fill([0, 0, 0])
             self.screen.blit(pygame.image.load(os.path.join("package_cards", "play_area.jpg")), (0, 0))
-            text_surface = base_font.render(self.player[self.player_turn].player_name, False, (255, 255, 255))
-            self.screen.blit(text_surface, (750, 50))
+
             self.draw()
             pygame.display.update()
 
             if self.uno_win():
                 self.running = False
-                print(f"Player nr: {self.player[self.player_turn - 1].player_name} won")
+                print(f"{self.player[self.player_turn - 1].player_name} won this time")
         clock.tick(10)
 
     def draw(self):
@@ -59,6 +58,18 @@ class Board:
                     p.draw()
                     break
         self.active_card.draw(CARDAREA_X, CARDAREA_y)
+        self.name_player()
+
+    def name_player(self):
+        base_font = pygame.font.Font(None, 32)
+        for i, p in enumerate(self.player):
+            if i == self.player_turn:
+                name_color = (0, 255, 0)
+
+            else:
+                name_color = (255, 255, 255)
+            text_surface = base_font.render(f"{p.player_name} : {p.print_hand()}", False, name_color)
+            self.screen.blit(text_surface, (675, 50 + 30 * i))
 
     def next_player(self):
 
@@ -77,7 +88,8 @@ class Board:
             self.player[self.player_turn].has_uno()
 
     def draw_card_button(self, x, y):
-        if DRAW_BUTTON_X <= x <= DRAW_BUTTON_X + 100 and DRAW_BUTTON_Y <= y <= DRAW_BUTTON_Y + 50:
+        if DRAW_BUTTON_X <= x <= DRAW_BUTTON_X + 100 and DRAW_BUTTON_Y <= y <= DRAW_BUTTON_Y + 50 and \
+                not isinstance(self.player[self.player_turn], Npc):
             self.player[self.player_turn].draw_card(self.deck)
             self.next_player()
 
