@@ -13,14 +13,11 @@ class Npc(Player):
         for c in self.hand:
             if c.color == active_card.color or c.val == active_card.val:
                 self.has_uno()
-                print(f"{c.colors[c.color]} {c.val}")
                 return c
         for c in self.hand:
             if c.color == 4:
                 self.has_uno()
-                print(f"{c.colors[c.color]} {c.val}")
                 return c
-        print("draw")
         return False
 
     def draw_card(self, deck):

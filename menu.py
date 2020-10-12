@@ -16,22 +16,24 @@ class Menu:
         self.name_the_player = False
         self.running = True
 
+        self.play_game = False
+
         self.image = pygame.image.load(os.path.join("package_cards", "input.png"))
 
     def menu_screen(self):
+        clock = pygame.time.Clock()
         base_font = pygame.font.Font(None, 32)
-
+        self.running = True
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    if self.start_game(mouse_x, mouse_y):
-                        self.name_the_player = True
-                    if self.exit_game(mouse_x, mouse_y):
-                        self.running = False
-                    elif self.input_npc:
+                    self.start_game(mouse_x, mouse_y)
+                    self.exit_game(mouse_x, mouse_y)
+
+                    if self.input_npc:
                         self.nr_of_players(mouse_x, mouse_y)
                 if event.type == pygame.KEYDOWN and self.name_the_player:
                     self.player_input(event)
@@ -45,10 +47,11 @@ class Menu:
 
             pygame.display.update()
 
+        clock.tick(10)
         if self.nr_of_npc == 0:
-            return False
+            self.play_game = False
         else:
-            return True
+            self.play_game = True
 
     def player_input(self, event):
         if event.key == pygame.K_BACKSPACE:
@@ -71,14 +74,13 @@ class Menu:
             for j in range(5):
                 if 305 + j * 100 <= x <= 360 + j * 100 and 220 + 60 * i <= y <= 270 + 60 * i:
                     self.nr_of_npc = i * 4 + j + 1
-                    print(i * 4 + j + 1)
 
         self.running = False
 
     def start_game(self, x, y):
         if 0 <= x <= 255 and 200 <= y <= 255:
-            return True
+            self.name_the_player = True
 
     def exit_game(self, x, y):
         if 0 <= x <= 255 and 275 <= y <= 315:
-            return True
+            self.running = False

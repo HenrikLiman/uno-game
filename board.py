@@ -26,6 +26,7 @@ class Board:
 
     def run(self):
         clock = pygame.time.Clock()
+        self.end_screen_card_rain()
         while self.running:
 
             for event in pygame.event.get():
@@ -34,7 +35,7 @@ class Board:
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     self.button_input(mouse_x, mouse_y)
-                    print(self.player[self.player_turn].player_name)
+
             self.screen.fill([0, 0, 0])
             self.screen.blit(pygame.image.load(os.path.join("package_cards", "play_area.jpg")), (0, 0))
 
@@ -45,6 +46,27 @@ class Board:
                 self.running = False
                 print(f"{self.player[self.player_turn - 1].player_name} won this time")
         clock.tick(10)
+
+    def end_screen_card_rain(self):
+        clock = pygame.time.Clock()
+        running = True
+        fall_x = random.randrange(0,SCREEN_WIDTH)
+        fall_y = 0
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+
+            self.screen.fill([0, 0, 0])
+            self.deck.cards[0].draw(fall_x, fall_y)
+            pygame.display.update()
+            fall_y += 0.1
+            if fall_y > SCREEN_HEIGHT:
+                fall_y = 0
+        clock.tick(1)
 
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (DRAW_BUTTON_X, DRAW_BUTTON_Y))
@@ -128,7 +150,6 @@ class Board:
             self.player[self.player_turn].draw_card(self.deck)
             self.next_player()
         if selected_card:
-
             if selected_card.color == self.active_card.color or selected_card.val == self.active_card.val or \
                     selected_card.color == 4 or self.active_card.color == 4:
 
@@ -151,21 +172,25 @@ class Board:
                 if not isinstance(self.player[self.player_turn - 1], Npc):
                     if event.type == pygame.MOUSEBUTTONUP:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
-                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # red
+                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and \
+                                CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # red
                             self.active_card = Card(0, self.active_card.val, self.screen)
                             running = False
-                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # blue
+                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and \
+                                CARDAREA_y <= mouse_y <= CARDAREA_y + 80:  # blue
                             self.active_card = Card(2, self.active_card.val, self.screen)
                             running = False
-                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # yellow
+                        if CARDAREA_X <= mouse_x <= CARDAREA_X + 50 and \
+                                CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # yellow
                             self.active_card = Card(3, self.active_card.val, self.screen)
                             running = False
-                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # green
+                        if CARDAREA_X + 50 <= mouse_x <= CARDAREA_X + 100 and \
+                                CARDAREA_y + 80 <= mouse_y <= CARDAREA_y + 160:  # green
                             self.active_card = Card(1, self.active_card.val, self.screen)
                             running = False
                 else:
-                    self.active_card = Card(self.player[self.player_turn - 1].npc_pick_color(), self.active_card.val,
-                                            self.screen)
+                    self.active_card = Card(self.player[self.player_turn - 1].npc_pick_color(),
+                                            self.active_card.val, self.screen)
                     running = False
 
             pygame.display.update()

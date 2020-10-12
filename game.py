@@ -10,10 +10,13 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     menu = Menu(screen)
-    if menu.menu_screen():
+    menu.menu_screen()
+    while menu.play_game:
         board = Board(menu.nr_of_npc, menu.player, screen)
         board.set_up()
         board.run()
+        #playagen?
+        menu.menu_screen()
 
 
 if __name__ == '__main__':
