@@ -25,7 +25,6 @@ class Player:
 
         self.uno = False
 
-
     def play_card(self, x, y):
         if 30 + len(self.hand) * 30 <= x <= len(self.hand) * 30 + 100 and 430 <= y <= 590:
             return self.hand[-1]
@@ -46,5 +45,3 @@ class Player:
     def set_up(self, deck):
         for i in range(5):
             self.draw_card(deck)
-
-
