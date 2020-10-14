@@ -26,7 +26,7 @@ class Board:
 
     def run(self):
         clock = pygame.time.Clock()
-        self.end_screen_card_rain()
+
         while self.running:
 
             for event in pygame.event.get():
@@ -44,29 +44,42 @@ class Board:
 
             if self.uno_win():
                 self.running = False
-                print(f"{self.player[self.player_turn - 1].player_name} won this time")
-        clock.tick(10)
+                self.end_screen_card_rain()
+            clock.tick(10)
 
     def end_screen_card_rain(self):
         clock = pygame.time.Clock()
         running = True
-        fall_x = random.randrange(0,SCREEN_WIDTH)
+        fall_x = []
         fall_y = 0
+        fall_x.append(0)
+        base_font = pygame.font.Font(None, 32)
+
+        for i in range(12):
+            fall_x.append(i * 80)
+
         while running:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONUP:
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    running = False
+            for i, x in enumerate(fall_x):
+                self.deck.cards[i + random.randrange(0, 9)].draw(x, fall_y)
+            text_surface = base_font.render(f"{self.player[self.player_turn - 1].player_name} won this time", False,
+                                            (255, 255, 255))
+            pygame.draw.rect(self.screen,(0,0,0),(SCREEN_WIDTH/2-350/2, SCREEN_HEIGHT/2-50, 350, 100))
+            self.screen.blit(text_surface, (SCREEN_WIDTH/2-350/2+5, 240))
+            self.screen.blit(base_font.render("Click anye where to continue", False, (255, 255, 255)),
+                             (SCREEN_WIDTH / 2 - 350 / 2 + 5,  240 + 32))
 
-            self.screen.fill([0, 0, 0])
-            self.deck.cards[0].draw(fall_x, fall_y)
             pygame.display.update()
-            fall_y += 0.1
+
+            fall_y += 120
             if fall_y > SCREEN_HEIGHT:
                 fall_y = 0
-        clock.tick(1)
+            clock.tick(2)
 
     def draw(self):
         self.screen.blit(pygame.image.load(os.path.join("package_cards", "uDraw.jpg")), (DRAW_BUTTON_X, DRAW_BUTTON_Y))

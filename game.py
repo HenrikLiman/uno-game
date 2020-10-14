@@ -15,7 +15,6 @@ def main():
         board = Board(menu.nr_of_npc, menu.player, screen)
         board.set_up()
         board.run()
-        #playagen?
         menu.menu_screen()
 
 

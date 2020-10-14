@@ -47,24 +47,21 @@ class Menu:
 
             pygame.display.update()
 
-        clock.tick(10)
+            clock.tick(10)
         if self.nr_of_npc == 0:
             self.play_game = False
         else:
             self.play_game = True
+            print(self.nr_of_npc)
 
     def player_input(self, event):
         if event.key == pygame.K_BACKSPACE:
             self.user_text = self.user_text[0:-1]
         elif event.key == pygame.K_RETURN:
-            if self.input_npc:
-                self.nr_of_npc = int(self.user_text)
-                self.running = False
-            else:
-                self.player = self.user_text
-                self.input_npc = True
-                self.user_text = ""
-                self.image = pygame.image.load(os.path.join("package_cards", "input2.png"))
+            self.player = self.user_text
+            self.input_npc = True
+            self.user_text = ""
+            self.image = pygame.image.load(os.path.join("package_cards", "input2.png"))
 
         else:
             self.user_text += event.unicode
@@ -74,8 +71,8 @@ class Menu:
             for j in range(5):
                 if 305 + j * 100 <= x <= 360 + j * 100 and 220 + 60 * i <= y <= 270 + 60 * i:
                     self.nr_of_npc = i * 4 + j + 1
-
-        self.running = False
+        if self.nr_of_npc > 0:
+            self.running = False
 
     def start_game(self, x, y):
         if 0 <= x <= 255 and 200 <= y <= 255:
