@@ -71,7 +71,7 @@ class Board:
                                             (255, 255, 255))
             pygame.draw.rect(self.screen,(0,0,0),(SCREEN_WIDTH/2-350/2, SCREEN_HEIGHT/2-50, 350, 100))
             self.screen.blit(text_surface, (SCREEN_WIDTH/2-350/2+5, 240))
-            self.screen.blit(base_font.render("Click anye where to continue", False, (255, 255, 255)),
+            self.screen.blit(base_font.render("click anywhere to continue", False, (255, 255, 255)),
                              (SCREEN_WIDTH / 2 - 350 / 2 + 5,  240 + 32))
 
             pygame.display.update()
