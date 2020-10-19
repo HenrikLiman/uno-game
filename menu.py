@@ -16,11 +16,15 @@ class Menu:
         self.name_the_player = False
         self.running = True
 
-        self.play_game = False
+        self.play_game = True
 
         self.image = pygame.image.load(os.path.join("package_cards", "input.png"))
 
     def menu_screen(self):
+        self.input_npc = False
+        self.name_the_player = False
+        self.nr_of_npc = 0
+        self.image = pygame.image.load(os.path.join("package_cards", "input.png"))
         clock = pygame.time.Clock()
         base_font = pygame.font.Font(None, 32)
         self.running = True
@@ -28,6 +32,7 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.play_game = False
                 if event.type == pygame.MOUSEBUTTONUP:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     self.start_game(mouse_x, mouse_y)
@@ -52,7 +57,6 @@ class Menu:
             self.play_game = False
         else:
             self.play_game = True
-            print(self.nr_of_npc)
 
     def player_input(self, event):
         if event.key == pygame.K_BACKSPACE:
